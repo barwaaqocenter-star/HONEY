@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sahan Honey - Malab Dabiici ah</title>
+<meta name="description" content="Sahan Honey - Dukaanka malabka dabiiciga ah. Ku bixi Mobile Money ama Bank Transfer.">
+<style>
+  :root{
+    --gold:#d4af37;
+    --amber:#b8860b;
+    --bg:#fff8dc;
+    --text:#5c3a00;
+  }
+  *{box-sizing:border-box}
+  body {
+    margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  header {
+    background: linear-gradient(90deg, var(--gold) 0%, var(--amber) 100%);
+    color: white;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky; top:0; z-index: 20;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  }
+  header h1 {
+    margin: 0; font-weight: 900; font-size: 1.4rem;
+    display:flex; align-items:center; gap:10px;
+  }
+  header h1 .logo{
+    width:34px; height:34px; border-radius:50%; background:#fff;
+    display:flex; align-items:center; justify-content:center; color:var(--amber);
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  }
+  header .cart-btn, .primary {
+    background: #fff3b0;
+    border: none;
+    padding: 8px 14px;
+    font-weight: bold;
+    color: #7a5f00;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .primary{background:var(--amber); color:#fff;}
+  main {
+    max-width: 1024px;
+    margin: 18px auto;
+    padding: 0 15px;
+  }
+  .hero{
+    background:#fff5b1; border:1px solid rgba(212,175,55,.35);
+    box-shadow: 2px 3px 10px rgb(212 175 55 / 0.25);
+    border-radius:16px; padding:16px;
+  }
+  h2 {
+    font-weight: 900;
+    font-size: 2rem;
+    margin: 6px 0;
+    color: var(--amber);
+  }
+  p.desc {
+    font-size: 1.05rem;
+    color: #6b4e00;
+    margin: 6px 0 14px;
+  }
+  .pill-row{display:flex; gap:10px; flex-wrap:wrap}
+  .pill{background:#fff; padding:8px 10px; border-radius:999px; border:1px solid rgba(184,134,11,.35); font-size:.9rem}
+  .products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+    gap: 18px; margin-top:16px;
+  }
+  .product {
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px;
+    border:1px solid rgba(212,175,55,.35);
+    box-shadow: 2px 3px 10px rgb(212 175 55 / 0.2);
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+  }
+  .product img {
+    width:100%; max-width: 220px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 3px 6px rgb(184 134 11 / 0.5);
+  }
+  .product h3 { margin: 6px 0; color: var(--amber); }
+  .product p { font-size: 0.95rem; color: #5c3a00; margin: 6px 0 12px; }
+  .product .price { font-weight: 800; font-size: 1.15rem; margin-bottom: 8px; }
+  .product button {
+    background: var(--amber);
+    border: none;
+    padding: 9px 14px;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform .05s ease-in;
+  }
+  .product button:active{transform:scale(.98)}
+  /* Cart modal */
+  .cart-modal {
+    position: fixed; inset:0;
+    background: rgba(0,0,0,0.45);
+    display: none; justify-content: center; align-items: center;
+    z-index: 1000; padding:10px;
+  }
+  .cart-modal.active { display: flex; }
+  .panel {
+    background: #fff;
+    padding: 18px;
+    border-radius: 14px;
+    width: 100%; max-width: 460px;
+    max-height: 85vh; overflow-y: auto;
+    border:1px solid rgba(212,175,55,.4);
+    box-shadow: 0 8px 20px rgba(0,0,0,.25);
+  }
+  .row{display:flex; align-items:center; justify-content:space-between; gap:12px}
+  .cart-header h3 { margin: 0; color: var(--amber); }
+  .icon-btn {
+    background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--amber);
+  }
+  .cart-list { margin-top: 12px; }
+  .cart-item { display: flex; align-items: center; gap:12px; padding:10px 0; border-bottom:1px dashed rgba(0,0,0,.1); }
+  .cart-item img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
+  .item-name { font-weight: 700; color:#7a5f00; }
+  .item-price { font-size: .95rem; color:#5c3a00; }
+  .qty-controls { display: flex; align-items:center; gap: 6px; }
+  .qty-controls button {
+    padding: 4px 10px; font-size: 1rem; font-weight: bold;
+    border: 1.5px solid var(--amber); background: var(--bg); border-radius: 8px; cursor: pointer;
+  }
+  .qty-controls span { min-width: 22px; text-align: center; font-weight: 700; color:#7a5f00; }
+  .subtotal { margin-top: 12px; font-weight: 800; font-size: 1.15rem; text-align: right; color: var(--amber); }
+  .checkout-btn { margin-top: 12px; width: 100%; padding: 10px; background: var(--amber); border:none; border-radius: 10px; color:#fff; font-weight: 800; cursor:pointer }
+  /* Checkout */
+  .tabs{display:flex; gap:8px; margin-top:10px}
+  .tab{flex:1; text-align:center; padding:8px; border-radius:999px; border:1.5px solid var(--amber); cursor:pointer; background:#fff8dc; font-weight:700;}
+  .tab.active{background:var(--amber); color:#fff;}
+  .checkout-form { margin-top: 16px; }
+  label { display: block; font-weight: 800; color:#7a5f00; margin: 8px 0 6px; }
+  input, select, textarea {
+    width: 100%; padding: 10px 12px; margin-bottom: 8px;
+    border-radius: 10px; border: 1.5px solid var(--amber); background:#fffdf2; color:#5c3a00; font-size:1rem;
+  }
+  textarea{resize:vertical}
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  .confirm-btn { background: var(--amber); color: white; font-weight: 800; padding: 12px; border: none; border-radius: 12px; cursor: pointer; width: 100%; margin-top: 6px;}
+  .message { margin-top: 10px; font-weight: 800; color: green; }
+  .order-summary{background:#fff; border:1px solid rgba(212,175,55,.35); border-radius:12px; padding:12px; margin-top:10px; font-size:.95rem}
+  .muted{color:#6b4e00; font-size:.9rem}
+  footer {
+    background: var(--gold);
+    color: #5c3a00;
+    padding: 14px 20px;
+    text-align: center;
+    margin-top: 30px;
+    font-weight: 800;
+  }
+  .whatsapp{display:inline-block; margin-top:8px; text-decoration:none; background:#25D366; color:#fff; padding:10px 12px; border-radius:10px; font-weight:800}
+  @media (max-width: 520px) { h2 { font-size: 1.5rem; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span class="logo">🍯</span> Sahan Honey</h1>
+  <button class="cart-btn" id="openCartBtn" aria-label="Fur kart">Kart (0)</button>
+</header>
+
+<main>
+  <section class="hero">
+    <h2>Malab Dabiici ah — Tayada Koowaad</h2>
+    <p class="desc">Ka iibso malabka ugu nadiifsan — dooro cabbirka ku habboon, isla markaana bixi si habsami leh adigoo isticmaalaya <b>Mobile Money</b> ama <b>Bank Transfer</b>.</p>
+    <div class="pill-row">
+      <span class="pill">🚚 Delivery: 24–72 saac</span>
+      <span class="pill">🛡️ Returns: 7 maalmood</span>
+      <span class="pill">📦 Bulk orders diyaar</span>
+    </div>
+  </section>
+
+  <section class="products" id="productsContainer" aria-label="Alaabooyinka">
+    <!-- Alaabooyinka waxaa ku dari doona JavaScript -->
+  </section>
+</main>
+
+<!-- Kart / Checkout modal -->
+<div class="cart-modal" id="cartModal" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+  <div class="panel">
+    <div class="row cart-header">
+      <h3 id="cartTitle">Kart</h3>
+      <button class="icon-btn" id="closeCartBtn" aria-label="Xir Kart">✕</button>
+    </div>
+
+    <div class="cart-list" id="cartList"><!-- Alaabooyinka kartka halkan --></div>
+    <div class="subtotal" id="cartSubtotal">Subtotal: $0.00</div>
+    <button class="checkout-btn" id="checkoutBtn">Checkout</button>
+
+    <!-- Tabs -->
+    <div class="tabs" id="tabs" style="display:none;">
+      <div class="tab active" data-tab="info">Macluumaad</div>
+      <div class="tab" data-tab="payment">Bixinta</div>
+      <div class="tab" data-tab="review">Dib u eegis</div>
+    </div>
+
+    <!-- Talaabada 1: Macaamilka & Cinwaanka -->
+    <form class="checkout-form" id="formInfo" style="display:none;">
+      <div class="grid-2">
+        <div>
+          <label for="customerName">Magacaaga</label>
+          <input type="text" id="customerName" placeholder="Magacaaga" required />
+        </div>
+        <div>
+          <label for="contactInfo">Xiriir (WhatsApp/Tell.)</label>
+          <input type="text" id="contactInfo" placeholder="+252 63 7799779" required />
+        </div>
+      </div>
+      <label for="addressLine">Cinwaan / Delivery address</label>
+      <input type="text" id="addressLine" placeholder="Degmada, jidka, guriga..." required />
+      <div class="grid-2">
+        <div>
+          <label for="city">Magaalada</label>
+          <input type="text" id="city" placeholder="Magaalada" required />
+        </div>
+        <div>
+          <label for="notes">Fariin (ikhtiyaari)</label>
+          <input type="text" id="notes" placeholder="Xog dheeraad ah…" />
+        </div>
+      </div>
+      <button type="button" class="confirm-btn" id="toPayment">Sii wad →</button>
+    </form>
+
+    <!-- Talaabada 2: Bixinta -->
+    <form class="checkout-form" id="formPayment" style="display:none;">
+      <label>Habka Bixinta</label>
+      <div class="grid-2">
+        <button type="button" class="tab active" id="btnMM">Mobile Money</button>
+        <button type="button" class="tab" id="btnBT">Bank Transfer</button>
+      </div>
+      <div id="paymentFields" style="margin-top:10px;"></div>
+      <button type="button" class="confirm-btn" id="toReview">Sii wad →</button>
+    </form>
+
+    <!-- Talaabada 3: Dib u eegis -->
+    <div id="formReview" class="checkout-form" style
